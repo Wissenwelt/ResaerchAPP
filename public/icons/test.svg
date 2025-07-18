@@ -1,0 +1,53 @@
+<svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="-200 -200 400 400"
+      className={className}
+      {...props}
+    >
+      <g>
+        {/* Central Line */}
+        <line
+          x1="0" y1="-130"
+          x2="0" y2="130"
+          stroke="currentColor"
+          strokeWidth="2"
+        />
+        {/* W Pattern */}
+        <g id="w-pattern-static">
+          <path
+            d="M -95,95 L -71,0 L -35,71 L 0,0 L 35,71 L 71,0 L 95,95"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="4"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M -95,-95 L -71,0 L -35,-71 L 0,0 L 35,-71 L 71,0 L 95,-95"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="4"
+            strokeLinejoin="round"
+          />
+        </g>
+        {/* Rotated Patterns */}
+        <use href="#w-pattern-static" transform="rotate(0)" />
+        <use href="#w-pattern-static" transform="rotate(90)" />
+        <use href="#w-pattern-static" transform="rotate(180)" />
+        <use href="#w-pattern-static" transform="rotate(270)" />
+        {/* Center Elements */}
+        <circle
+          cx="0"
+          cy="0"
+          r="32"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+        />
+        <circle
+          cx="0"
+          cy="0"
+          r="10"
+          fill="currentColor"
+        />
+      </g>
+    </svg>

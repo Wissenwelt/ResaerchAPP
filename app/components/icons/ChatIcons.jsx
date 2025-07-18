@@ -1,0 +1,84 @@
+import React from 'react';
+
+const ChatIcon = ({ className }) => {
+  return (
+    <svg
+      className={className} // Pass className to the svg element
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* Wrapped all elements in a group and applied a transform to scale the icon up. */}
+      <g transform="scale(1.15) translate(-1.8, -1.8)">
+        <rect
+          x="5"
+          y="6"
+          width="14"
+          height="10"
+          rx="3"
+          ry="3"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        />
+        <line
+          x1="12"
+          y1="6"
+          x2="12"
+          y2="3"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        />
+        <circle cx="12" cy="2" r="1" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <animate
+            attributeName="r"
+            values="1;1.5;1"
+            dur="2s"
+            repeatCount="indefinite"
+          />
+        </circle>
+        <circle cx="9.5" cy="9" r="0.75" fill="currentColor" />
+        <circle cx="14.5" cy="9" r="0.75" fill="currentColor" />
+        <rect x="10" y="12" width="4" height="1" rx="0.5" ry="0.5" fill="currentColor" />
+        <rect
+          x="7"
+          y="16"
+          width="10"
+          height="6"
+          rx="2"
+          ry="2"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        />
+        <g transform="translate(9.5, 14)">
+          <path
+            d="M 0,0 C 1.5,-1 3.5,-1 5,0 C 3.5,1 1.5,1 0,0 Z"
+            fill="currentColor"
+            fillOpacity="0.3"
+          >
+            <animateTransform
+              attributeName="transform"
+              type="scale"
+              begin="0s"
+              dur="1.5s"
+              values="1;1.8;1"
+              repeatCount="indefinite"
+              additive="sum"
+            />
+            <animate
+              attributeName="fill-opacity"
+              values="0.3;0.8;0.3"
+              dur="1.5s"
+              repeatCount="indefinite"
+            />
+          </path>
+        </g>
+      </g>
+    </svg>
+  );
+};
+
+export default ChatIcon;

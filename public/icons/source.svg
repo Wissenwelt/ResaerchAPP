@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 48 48">
+  <style>
+    .book-cover {
+      fill: #1976D2;
+      animation: book-float 4s ease-in-out infinite;
+    }
+        
+    .page-left {
+      fill: #E3F2FD;
+      animation: page-flip-left 5s ease-in-out infinite;
+    }
+        
+    .page-right {
+      fill: #E3F2FD;
+      animation: page-flip-right 5s ease-in-out infinite;
+    }
+        
+    .sparkle {
+      fill: #FFD740;
+      animation: sparkle 3s ease infinite;
+      opacity: 0;
+    }
+        
+    .glow {
+      fill: url(#glow-gradient);
+      mix-blend-mode: soft-light;
+      animation: glow-pulse 4s ease infinite;
+    }
+        
+    .binding {
+      fill: #0D47A1;
+      animation: binding-shine 6s linear infinite;
+    }
+        
+    @keyframes book-float {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-6px) rotate(2deg); }
+    }
+        
+    @keyframes page-flip-left {
+      0%, 100% { transform: perspective(400px) rotateY(10deg); }
+      50% { transform: perspective(400px) rotateY(-15deg); }
+    }
+        
+    @keyframes page-flip-right {
+      0%, 100% { transform: perspective(400px) rotateY(-10deg); }
+      50% { transform: perspective(400px) rotateY(15deg); }
+    }
+        
+    @keyframes sparkle {
+      0% { opacity: 0; transform: scale(0); }
+      20% { opacity: 1; transform: scale(1) rotate(20deg); }
+      80% { opacity: 1; transform: scale(1) rotate(20deg); }
+      100% { opacity: 0; transform: scale(2) rotate(45deg); }
+    }
+        
+    @keyframes glow-pulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.7; }
+    }
+        
+    @keyframes binding-shine {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(200%); }
+    }
+  </style>
+    
+  <!-- Book base -->
+  <path class="book-cover" d="M12 6C8 6 4 8 4 12v28c0 4 4 6 8 6h28V6H12z"/>
+    
+  <!-- Pages -->
+  <path class="page-left" d="M12 6h20v34H12c-4 0-8-2-8-6V12c0-4 4-6 8-6z"/>
+  <path class="page-right" d="M32 6h8v34h-8c-4 0-8-2-8-6V12c0-4 4-6 8-6z"/>
+    
+  <!-- Binding effect -->
+  <rect class="binding" x="10" y="6" width="4" height="34" rx="2"/>
+    
+  <!-- Glow effect -->
+  <circle class="glow" cx="24" cy="24" r="18"/>
+    
+  <!-- Animated text lines -->
+  <g opacity="0.3">
+    <rect x="16" y="14" width="16" height="2" fill="#1976D2" rx="1"/>
+    <rect x="16" y="18" width="12" height="2" fill="#1976D2" rx="1"/>
+    <rect x="16" y="22" width="14" height="2" fill="#1976D2" rx="1"/>
+    <rect x="16" y="26" width="10" height="2" fill="#1976D2" rx="1"/>
+  </g>
+    
+  <!-- Sparkles -->
+  <path class="sparkle" d="M30 18l2-4 2 4 4 2-4 2-2 4-2-4-4-2z" style="animation-delay: 0.5s"/>
+  <path class="sparkle" d="M18 30l1-2 1 2 2 1-2 1-1 2-1-2-2-1z" style="animation-delay: 1.2s"/>
+    
+  <defs>
+    <radialGradient id="glow-gradient">
+      <stop offset="0%" stop-color="#90CAF9"/>
+      <stop offset="100%" stop-color="#1976D2"/>
+    </radialGradient>
+  </defs>
+</svg>
