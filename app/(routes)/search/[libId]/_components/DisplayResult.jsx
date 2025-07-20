@@ -1,17 +1,21 @@
+// DisplayResult.js - Fixed responsive tabs and layout
 "use client";
 import React, { useEffect, useState } from 'react';
 import { Image, VideoIcon } from 'lucide-react';
 import AnimatedLogoIcon from '@/app/components/icons/AnimatedLogoIcon';
 import AnswerDisplay from '@/app/(routes)/search/[libId]/_components/AnswerDisplay';
-// NOTE: Added axios import
 import axios from 'axios';
+import { SEARCH_RESULT } from '@/Services/Shared';
+import { useParams } from 'next/navigation';
 
-// Create a simple component for the 'source.svg' icon.
+// Imports for Drizzle ORM
+import { db } from '@/configs/db';
+import { Chats } from '@/configs/schema';
+
 const SourceIcon = ({ className }) => (
     <img src='/icons/source.svg' alt='Sources Icon' className={className} />
 );
 
-// The tabs array is updated with a 'color' property for the icons that need it.
 const tabs = [
     { label: 'Answer', icon: AnimatedLogoIcon },
     { label: 'Image', icon: Image, color: '#1279cf' },
@@ -21,6 +25,8 @@ const tabs = [
 
 function DisplayResult({ searchInputRecord }) {
     const [activeTab, setActiveTab] = useState('Answer');
+    const [searchResult, setSearchResult] = useState(SEARCH_RESULT);
+    const {libId}=useParams();
 
     useEffect(() => {
         if (searchInputRecord) {
@@ -29,56 +35,91 @@ function DisplayResult({ searchInputRecord }) {
     }, [searchInputRecord]);
 
     const GetSearchApiResult = async () => {
+        const result = await axios.post('/api/brave-search-api', {
+            searchInput: searchInputRecord?.searchInput,
+            searchType: searchInputRecord?.type
+        });
+        console.log(result.data);
+
+        
+        const seachResp=result.data;
+        // Save to the DB
+        const formattedSerachResp=seachResp?.web?.results?.map((item,index)=>(
+            {
+                title: item?.title,
+                description:item?.description,
+                long_name:item?.profile?.long_name,
+                img:item?.profile?.img,
+                url:item?.url,
+                thumbnail:item?.thumbnail?.src
+            }
+        ))
+        console.log(formattedSerachResp);
+
         try {
-            const result = await axios.post('/api/brave-search-api', {
-                searchInput: searchInputRecord?.searchInput,
-                searchType: searchInputRecord?.type
-            });
-            
-            
-            console.log("Data received in DisplayResult component:", result.data);
-            console.log("Stringified data:", JSON.stringify(result.data));
-        } catch (error) {
-            console.error("Error calling local search API:", error);
+            const savedData = await db.insert(Chats).values({
+                libId: libId,
+                searchResult: formattedSerachResp,
+                aiResponse: '' // This field is required (notNull) in your schema
+            }).returning();
+
+            console.log("Saved to DB with Drizzle:", savedData);
+        } catch (dbError) {
+            console.error("Drizzle DB Error:", dbError);
         }
     };
 
     return (
-        <div className='mt-7'>
-            <h2 className='font-medium text-3xl line-clamp-2'>
+        <div className='mt-7 w-full overflow-hidden'>
+            {/* Responsive title */}
+            <h2 className='font-medium text-xl sm:text-2xl lg:text-3xl line-clamp-2 break-words'>
                 {searchInputRecord?.searchInput}
             </h2>
-            <div className="flex items-center space-x-6 border-b border-gray-200 pb-2 mt-6">
-                {tabs.map(({ label, icon: Icon, badge, color }) => (
-                    <button
-                        key={label}
-                        onClick={() => setActiveTab(label)}
-                        className={`flex items-center gap-1 relative text-sm font-medium text-gray-700 hover:text-black ${activeTab === label ? 'text-black' : ''}`}
-                    >
-                        <Icon
-                            className={label === 'Answer' ? 'w-6 h-6' : 'w-4 h-4'}
-                            color={color}
-                        />
-                        <span>{label}</span>
-                        {badge && (
-                            <span className="ml-1 text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">
-                                {badge}
-                            </span>
-                        )}
-                        {activeTab === label && (
-                            <span className="absolute -bottom-2 left-0 w-full h-0.5 bg-[#1279cf] rounded"></span>
-                        )}
-                    </button>
-                ))}
-                <div className="ml-auto text-sm text-gray-500">
-                    1 task <span className="ml-1" />
+
+            {/* Fully responsive tabs container */}
+            <div className="w-full mt-6">
+                {/* Scrollable tabs container for mobile */}
+                <div className="flex items-center justify-between border-b border-gray-200 pb-2">
+                    <div className="flex-1 overflow-x-auto scrollbar-hide">
+                        <div className="flex items-center gap-4 sm:gap-6 min-w-max">
+                            {tabs.map(({ label, icon: Icon, badge, color }) => (
+                                <button
+                                    key={label}
+                                    onClick={() => setActiveTab(label)}
+                                    className={`flex items-center gap-1 relative text-sm font-medium text-gray-700 hover:text-black transition-colors whitespace-nowrap ${
+                                        activeTab === label ? 'text-black' : ''
+                                    }`}
+                                >
+                                    <Icon
+                                        className={label === 'Answer' ? 'w-5 h-5 sm:w-6 sm:h-6' : 'w-4 h-4'}
+                                        color={color}
+                                    />
+                                    <span className="text-xs sm:text-sm">{label}</span>
+                                    {badge && (
+                                        <span className="ml-1 text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">
+                                            {badge}
+                                        </span>
+                                    )}
+                                    {activeTab === label && (
+                                        <span className="absolute -bottom-2 left-0 w-full h-0.5 bg-[#1279cf] rounded"></span>
+                                    )}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Task count - hidden on very small screens */}
+                    <div className="text-xs sm:text-sm text-gray-500 ml-4 whitespace-nowrap hidden sm:block">
+                        1 task
+                    </div>
                 </div>
             </div>
 
-            <div>
-                {activeTab === 'Answer' ?
-                    <AnswerDisplay /> : null
-                }
+            {/* Content area */}
+            <div className='w-full'>
+                {activeTab === 'Answer' && searchResult && (
+                    <AnswerDisplay searchResult={searchResult} />
+                )}
             </div>
         </div>
     );

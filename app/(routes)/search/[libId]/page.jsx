@@ -1,10 +1,11 @@
-"use client"
-import React, { useEffect, useState } from 'react'
+// SearchQueryResult.js - Keep original layout structure
+"use client";
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { db } from '@/configs/db';
 import { eq } from "drizzle-orm";
 import { Library } from '@/configs/schema';
-import Header from './_components/Header'
+import Header from './_components/Header';
 import DisplayResult from './_components/DisplayResult';
 
 function SearchQueryResult() {
@@ -28,13 +29,14 @@ function SearchQueryResult() {
     }, [libId]);
 
     return (
-        <div className='w-full'>
+        <div className='w-full overflow-x-hidden'>
             <Header searchInputRecord={searchInputRecord} />
-            <div className='px-10 md:px-20 lg:px-36 xl:px-56 mt-20 w-full'>
+            {/* Keep original container but add overflow protection */}
+            <div className='w-full max-w-screen-xl mx-auto px-10 sm:px-20 mt-7'>
                 <DisplayResult searchInputRecord={searchInputRecord} />
             </div>
         </div>
-    )
+    );
 }
 
 export default SearchQueryResult;

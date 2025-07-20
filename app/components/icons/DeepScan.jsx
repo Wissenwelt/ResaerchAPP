@@ -1,6 +1,7 @@
 import React from 'react';
 
-const DeepScan = ({ className, ...props }) => {
+// Add 'active' to the destructured props here
+const DeepScan = ({ className, active, ...props }) => {
   // The primary color for the icon, converted from oklch to a hex value for broader SVG compatibility.
   const primaryColor = "#1279cf"; 
   // A secondary color for the animated electrons.

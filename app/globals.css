@@ -171,3 +171,62 @@
   -webkit-background-clip: text; /* For cross-browser compatibility */
   color: transparent;
 }
+
+@layer utilities {
+  .animate-marquee {
+    animation: marquee 40s linear infinite;
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Add this to your global CSS file (globals.css or tailwind.css) */
+
+/* Hide scrollbar for tabs container */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
+}
+
+/* Improved marquee animation that respects container bounds */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+  width: fit-content;
+}
+
+/* Pause marquee on hover */
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Ensure no horizontal overflow on the body */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Responsive breakpoint adjustments */
+@media (max-width: 640px) {
+  .animate-marquee {
+    animation-duration: 25s; /* Slightly faster on mobile */
+  }
+}

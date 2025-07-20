@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-// ICONS: Cleaned up imports to remove unused icons and keep the new ones.
 import { 
     BrainCircuit, SearchCheck, ArrowRight, MicVocal, 
     LucideBinoculars, LucideCircleFadingPlus, LucideHandCoins, 
@@ -24,6 +23,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useRouter } from 'next/navigation';
 import ChatIcon from '../components/icons/ChatIcons';
 import DeepScan from '../components/icons/DeepScan';
+import SearchBan from '../components/icons/SearchBan'; // Added SearchBan import
 
 
 const icons = {
@@ -37,6 +37,7 @@ function ChatInputBox() {
     const { user } = useUser();
     const [userSearchInput, setUserSearchInput] = useState('');
     const [searchType, setSearchType] = useState('search');
+    const [activeTab, setActiveTab] = useState('Scan'); // Added state to track active tab
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
@@ -85,7 +86,7 @@ function ChatInputBox() {
             </h2>
             <div className='p-2 w-full max-w-2xl border rounded-2xl mt-10'>
                 <div className='flex justify-between items-end'>
-                    <Tabs defaultValue="Scan" className="w-[400px]">
+                    <Tabs defaultValue="Scan" className="w-[400px]" onValueChange={setActiveTab}>
                         <TabsContent value="Scan">
                             <input
                                 type='text'
@@ -104,6 +105,15 @@ function ChatInputBox() {
                                 className='w-full p-4 outline-none'
                             />
                         </TabsContent>
+                        <TabsContent value="NoSearch">
+                            <input
+                                type='text'
+                                placeholder='Ask direct to the LLM Model'
+                                onChange={(e) => setUserSearchInput(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                                className='w-full p-4 outline-none'
+                            />
+                        </TabsContent>
                         <TabsList>
                             <TabsTrigger
                                 value="Scan"
@@ -117,8 +127,15 @@ function ChatInputBox() {
                                 className={'data-[state=active]:text-primary'}
                                 onClick={() => setSearchType('research')}
                             >
-                                {/* This uses your new custom icon */}
-                                <DeepScan className="w-6 h-6 mr-1" /> DeepScan
+                                <DeepScan className="w-6 h-6 mr-1" active={activeTab === 'DeepScan'} /> DeepScan
+                            </TabsTrigger>
+                            <TabsTrigger
+                                value="NoSearch"
+                                className={'data-[state=active]:text-primary'}
+                                onClick={() => setSearchType('nosearch')}
+                            >
+                                {/* Changed from DeepScan to SearchBan icon */}
+                                <SearchBan className="w-6 h-6 mr-1" active={activeTab === 'NoSearch'} /> No Search
                             </TabsTrigger>
                         </TabsList>
                     </Tabs>
@@ -145,7 +162,6 @@ function ChatInputBox() {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant={'ghost'} className="p-2">
-                                    {/* This uses your new icon */}
                                     <LucideBinoculars className='h-5 w-5 text-gray-500' />
                                 </Button>
                             </DropdownMenuTrigger>
@@ -156,7 +172,6 @@ function ChatInputBox() {
                                         <DropdownMenuItem key={source.id} onSelect={(e) => e.preventDefault()}>
                                             <div className='flex items-center justify-between w-full'>
                                                 <div className='flex items-center gap-2'>
-                                                    {/* This correctly renders your re-mapped icons */}
                                                     <IconComponent className="h-4 w-4 text-gray-500" />
                                                     <div>
                                                         <h2 className='text-sm'>{source.name}</h2>
@@ -171,7 +186,6 @@ function ChatInputBox() {
                             </DropdownMenuContent>
                         </DropdownMenu>
                         
-                        {/* This uses your new icon */}
                         <Button variant={'ghost'}>
                             <LucideCircleFadingPlus className='text-gray-500 h-5 w-5' />
                         </Button>
