@@ -5,8 +5,6 @@ import AnimatedLogoIcon from '@/app/components/icons/AnimatedLogoIcon';
 import AnswerDisplay from '@/app/(routes)/search/[libId]/_components/AnswerDisplay';
 import { SEARCH_RESULT } from '@/Services/Shared';
 import { useParams } from 'next/navigation';
-
-// Imports for Drizzle ORM
 import { db } from '@/configs/db';
 import { Chats } from '@/configs/schema';
 import { eq } from 'drizzle-orm';
@@ -28,7 +26,6 @@ function DisplayResult({ searchInputRecord }) {
     const { libId } = useParams();
 
     useEffect(() => {
-        // **FIX STARTS HERE: Use AbortController to handle Strict Mode**
         const controller = new AbortController();
         const signal = controller.signal;
 
@@ -98,7 +95,6 @@ function DisplayResult({ searchInputRecord }) {
         return () => {
             controller.abort();
         };
-        // **FIX ENDS HERE**
     }, [searchInputRecord, libId]); // Add libId to dependency array
 
     return (
