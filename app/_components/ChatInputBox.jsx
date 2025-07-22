@@ -70,7 +70,7 @@ function ChatInputBox() {
     };
 
     const handleVoiceInterface = () => {
-        router.push('/voice-input'); // Navigate to voice interface
+        router.push('/voice-input'); 
     };
 
     const handleKeyDown = (e) => {

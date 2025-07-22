@@ -7,7 +7,6 @@ function AnswerDisplay({ searchResult }) {
 
     return (
         <div className="relative mt-5 w-full">
-            {/* Container that prevents horizontal overflow */}
             <div className="overflow-hidden w-full">
                 <div className="flex animate-marquee">
                     {duplicatedResults.map((item, index) => (
